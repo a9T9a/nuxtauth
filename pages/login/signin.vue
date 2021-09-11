@@ -11,6 +11,7 @@
                 v-model="form.email"
                 type="email"
                 placeholder="Enter email"
+                :state="validEmail(form.email)"
                 required
             ></b-form-input>
         </b-form-group>
@@ -21,18 +22,22 @@
              type="password" 
              id="text-password" 
              aria-describedby="password-help-block"
+             :state="validPassword(form.password)"
             ></b-form-input>
             <b-form-text id="password-help-block">
                 Your password must be 8-20 characters long, contain letters and numbers, and must not
                 contain spaces, special characters, or emoji.
             </b-form-text>
-            <b-button @click="signUp" variant="outline-primary">Sign Up</b-button>
+            <b-button @click="signIn" variant="outline-primary">Sign In</b-button>
         </b-form>
     </div>
 </template>
 
 <script>
 export default {
+
+    layout:"anonymousUser",
+
     data() {
         return {
             form:{
@@ -43,14 +48,28 @@ export default {
     },
 
     methods: {
-        signUp(){
-            this.$store.dispatch("users/createUser",this.form)
+
+        signIn(){
+            this.$store.dispatch("users/signIn",this.form)
             .then(()=>{
-                this.$router.push("/")
+                this.$router.push("/profile")
             })
             .catch(err=>{
                 console.log(err)
             })
+        },
+
+        validEmail: function (email) {
+            var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        },
+
+        validPassword(password){
+            if(password!=null && password.length>=8 && password.length<=20){
+                return true
+            }else{
+                return false
+            }
         }
     },
 }

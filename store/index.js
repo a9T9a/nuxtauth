@@ -7,13 +7,14 @@ export const actions = {
         if(!req.headers.cookie) return
 
         const parsedCookie = cookieparser.parse(req.headers.cookie)
+        const parsedToken = parsedCookie.access_token
 
-        if(!parsedCookie.access_token) return
+        if(!parsedToken) return
 
-        const decoded = JWTDecode(parsedCookie.access_token)
+        const decoded = JWTDecode(parsedToken)
 
         if(decoded){
-            commit("saveUser",{
+            commit("users/saveUser",{
                 email : decoded.email,
                 uid : decoded.user_id
             })

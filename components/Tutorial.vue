@@ -9,6 +9,8 @@
       <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg p-6">
         <h2 class="text-2xl leading-7 font-semibold">
           Welcome to your Nuxt Application
+          <b-button @click="signIn" variant="outline-primary">SignIn</b-button>
+          <b-button @click="logout" variant="outline-primary">LogOut</b-button>
         </h2>
         <p class="mt-3 text-gray-600">
           We recommend you take a look at the <a href="https://nuxtjs.org" target="_blank" class="text-green-500 hover:underline">Nuxt documentation</a>, whether you are new or have previous experience with the framework.<br>
@@ -44,3 +46,23 @@
     </div>
   </div>
 </template>
+
+<script>
+
+import firebase from "@/services/firebase"
+import Cookie from "js-cookie"
+
+export default {
+  methods:{
+    signIn(){
+      this.$router.push("/signIn")
+    },
+
+    async logout(){
+      this.$router.push("/signIn")
+      await firebase.auth().signOut()
+      await Cookie.remove("access_token")
+    }
+  }
+}
+</script>
